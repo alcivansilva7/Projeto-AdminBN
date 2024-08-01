@@ -54,3 +54,36 @@ Testar a funcionalidade e usabilidade da solução em ambientes simulados e reai
 Avaliar o desempenho e eficácia da solução, considerando critérios como facilidade de uso, economia de recursos e benefícios para os administradores de redes.
 
 Contribuir para a disseminação de soluções inovadoras e acessíveis na área de administração de redes, promovendo uma maior democratização do acesso a ferramentas de tecnologia da informação e comunicação.
+
+#### Entregas
+Sprint 1: Planejamento e Preparação
+Definir os requisitos detalhados do sistema, incluindo os comandos do bot Telegram e os serviços de redes a serem integrados.
+Estabelecer a arquitetura geral do sistema e definir as tecnologias a serem utilizadas.
+Criar um plano detalhado de projeto, incluindo cronograma, alocação de recursos e metas específicas para cada sprint subsequente.
+
+Sprint 2: Desenvolvimento do Bot Telegram
+Desenvolver e testar as funcionalidades básicas do bot Telegram, incluindo a capacidade de receber e interpretar comandos dos usuários.
+Implementar a lógica de negócios inicial para responder aos comandos relacionados à administração de redes.
+
+Sprint 3: Integração com Serviços de Redes
+Integrar o bot Telegram com os serviços de redes mais comuns, como servidores DHCP, DNS e firewall.
+Estabelecer a comunicação eficaz entre o bot e os serviços de redes, garantindo a execução segura e confiável dos comandos.
+
+Sprint 4: Implementação de Recursos Avançados
+Desenvolver recursos avançados para o bot Telegram, como autenticação básica
+Realizar testes extensivos para garantir a estabilidade e funcionalidade dos novos recursos implementados.
+
+Sprint 5: Testes e Ajustes
+Realizar testes de funcionalidade e usabilidade da solução em ambientes simulados e reais de redes de pequeno porte.
+Coletar feedback dos usuários e realizar ajustes necessários com base nos resultados dos testes.
+
+Sprint 6: Avaliação e Entrega Final
+Avaliar o desempenho e eficácia da solução, considerando critérios como facilidade de uso, economia de recursos e benefícios para os administradores de redes.
+Preparar a documentação final do projeto e realizar a entrega da solução.
+
+#### Disciplinas Escolhidas
+1. Arquitetura TCP/IP
+2. Programação para Redes
+3. Administração de Sistemas Abertos
+4. Administração Avançada de Serviços de Redes
+5. Introdução aos Sistemas Abertos

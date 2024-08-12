@@ -66,6 +66,7 @@ Desenvolver e testar as funcionalidades básicas do bot Telegram, incluindo a ca
 Implementar a lógica de negócios inicial para responder aos comandos relacionados à administração de redes.
 
 Sprint 3: Integração com Serviços de Redes
+
 Integrar o bot Telegram com os serviços de redes mais comuns, como servidores DHCP, DNS e firewall.
 Estabelecer a comunicação eficaz entre o bot e os serviços de redes, garantindo a execução dos comandos.
 

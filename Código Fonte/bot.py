@@ -93,6 +93,12 @@ def usuario_hotspot(mensagem):
     bot.send_message(id_chat, "INFORME A SENHA DO HOTSPOT:")
     bot.register_next_step_handler(mensagem, senha_hotspot)
 
+def senha_hotspot(mensagem):
+    id_chat = mensagem.chat.id
+    selecoes.append(mensagem.text)
+    envio = json.dumps(selecoes)
+    socket_cliente.sendall(envio.encode())
+    retorno = json.loads(socket_cliente.recv(4096).decode())
 
 
 def menu(mensagem):

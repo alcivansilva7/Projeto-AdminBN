@@ -58,6 +58,24 @@ def listar_ips(mensagem):
     else:
         bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
+@bot.message_handler(commands=["listar_interface"])
+def listar_interface(mensagem):
+    id_chat = mensagem.chat.id
+    global logado
+    if logado:
+        dados = json.dumps("/listar_interface")
+        socket_cliente.sendall(dados.encode())
+        retorno = json.loads(socket_cliente.recv(4096).decode())
+        if not retorno:
+            bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
+            menu(mensagem)
+        else:
+            saida = "\n".join(retorno)
+            bot.send_message(id_chat, saida)
+            menu(mensagem)
+    else:
+        bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+
 def menu(mensagem):
     id_chat = mensagem.chat.id
     bot.send_message(id_chat, """ESCOLHA A OPÇÃO DESEJADA:

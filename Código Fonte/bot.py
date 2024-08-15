@@ -38,12 +38,19 @@ bot = telebot.TeleBot(os.getenv('BOT_CHAVE'))
 #        else:
 #            bot.send_message(id_chat, "USUÁRIO OU SENHA INCORRETOS, CLIQUE AQUI PARA INICIAR: /iniciar")
 
-# Retorna True toda fez que a função for chamada
-def echo(mensagem):
+#Criando Menu de funcionalidades iniciais do BOT
+def menu(mensagem):
     id_chat = mensagem.chat.id
-    bot.send_message(id_chat, mensagem.text)
+    bot.send_message(id_chat, """ESCOLHA A OPÇÃO DESEJADA:
+/listar LISTA TODOS OS IPs QUE ESTÃO NO LEASE DO DHCP
+/listar_interface  LISTA TODOS OS IPs DAS INTERFACES DE REDE
+/cadastrar_usuario CADASTRA UM USUÁRIO NO HOTSPOT
+/apagar_usuario    APAGA UM USUÁRIO NO HOTSPOT
+                             """)
 
 
+
+# Retorna True toda fez que a função for chamada
 def iniciar(mensagem):
     return True
 
@@ -53,8 +60,9 @@ def default(mensagem):
     id_chat = mensagem.chat.id
     bot.reply_to(mensagem,"""BEM VINDO AO ADMINBN
 VOCÊ DEVE SE AUTENTICAR PRIMEIRO!""")
-    bot.send_message(id_chat, "DIGITE ALGO")
-    bot.register_next_step_handler(mensagem, echo)
+    #bot.send_message(id_chat, "DIGITE ALGO")
+    #bot.register_next_step_handler(mensagem, echo)
+    menu(mensagem)
     
 
 # chama o objeto BOT para ficar em execução, é responsável por verificar continuamente se o bot está recebendo novas mensagens

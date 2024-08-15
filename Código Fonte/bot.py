@@ -76,6 +76,11 @@ def listar_interface(mensagem):
     else:
         bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
+@bot.message_handler(commands=["cadastrar_usuario"])
+def cadastrar_usuario(mensagem):
+    id_chat = mensagem.chat.id
+    global logado
+
 def menu(mensagem):
     id_chat = mensagem.chat.id
     bot.send_message(id_chat, """ESCOLHA A OPÇÃO DESEJADA:
@@ -104,3 +109,4 @@ VOCÊ DEVE SE AUTENTICAR PRIMEIRO!""")
 
 # chama o objeto BOT para ficar em execução, é responsável por verificar continuamente se o bot está recebendo novas mensagens
 bot.polling()
+

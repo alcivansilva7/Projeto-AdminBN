@@ -100,6 +100,39 @@ def senha_hotspot(mensagem):
     socket_cliente.sendall(envio.encode())
     retorno = json.loads(socket_cliente.recv(4096).decode())
 
+    if retorno == "comando realizado com sucesso":
+        bot.send_message(id_chat, "USUARIO CADASTRADO COM SUCESSO!")
+        menu(mensagem)
+    else:
+        bot.send_message(id_chat, "USUÁRIO JÁ EXISTE!")
+        menu(mensagem)
+    selecoes.clear()
+
+@bot.message_handler(commands=["apagar_usuario"])
+def apagar_usuario(mensagem):
+    id_chat = mensagem.chat.id
+    global logado
+    if logado:
+        selecoes.append("/apagar_usuario")
+        bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT A SER APAGADO:")
+        bot.register_next_step_handler(mensagem, usuario_apagar)
+    else:
+        bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+
+def usuario_apagar(mensagem):
+    id_chat = mensagem.chat.id
+    selecoes.append(mensagem.text)
+    envio = json.dumps(selecoes)
+    socket_cliente.sendall(envio.encode())
+    retorno = json.loads(socket_cliente.recv(4096).decode())
+    if retorno == "comando realizado com sucesso":
+        bot.send_message(id_chat, "USUARIO APAGADO COM SUCESSO!")
+        menu(mensagem)
+    else:
+        bot.send_message(id_chat, "USUÁRIO INEXISTENTE!")
+        menu(mensagem)
+    selecoes.clear()
+
 
 def menu(mensagem):
     id_chat = mensagem.chat.id

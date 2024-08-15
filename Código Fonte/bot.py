@@ -1,19 +1,15 @@
 # Importando bibliotecas necessárias
-import telebot
+import telebot, os
 import socket
 import json
 
-
-socket_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socket_cliente.connect(("localhost", 5000))
-
-# Aqui informamos a chave API do BOT, essa foi usada apenas como exemplo, a definitiva ainda será criada
-CHAVE_API = "Chave"
+#socket_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#socket_cliente.connect(("localhost", 5000))
 credenciais = {}
 selecoes = []
 logado = False
-bot = telebot.TeleBot(CHAVE_API)
-
+#chamando a chave API do BOT que foi armazenada numa variável de ambbiente por segurança
+bot = telebot.TeleBot(os.getenv('BOT_CHAVE'))
 
 # Autenticação futura
 
@@ -42,6 +38,32 @@ bot = telebot.TeleBot(CHAVE_API)
 #        else:
 #            bot.send_message(id_chat, "USUÁRIO OU SENHA INCORRETOS, CLIQUE AQUI PARA INICIAR: /iniciar")
 
+#Criando Menu de funcionalidades iniciais do BOT
+def menu(mensagem):
+    id_chat = mensagem.chat.id
+    bot.send_message(id_chat, """ESCOLHA A OPÇÃO DESEJADA:
+/listar LISTA TODOS OS IPs QUE ESTÃO NO LEASE DO DHCP
+/listar_interface  LISTA TODOS OS IPs DAS INTERFACES DE REDE
+/cadastrar_usuario CADASTRA UM USUÁRIO NO HOTSPOT
+/apagar_usuario    APAGA UM USUÁRIO NO HOTSPOT
+                             """)
 
 
 
+# Retorna True toda fez que a função for chamada
+def iniciar(mensagem):
+    return True
+
+# Chama a função default sempre que a função iniciar retornar True, é usada para que o BOT sempre esteja apto a responder o usuário com uma resposta padrão
+@bot.message_handler(func=iniciar)
+def default(mensagem):
+    id_chat = mensagem.chat.id
+    bot.reply_to(mensagem,"""BEM VINDO AO ADMINBN
+VOCÊ DEVE SE AUTENTICAR PRIMEIRO!""")
+    #bot.send_message(id_chat, "DIGITE ALGO")
+    #bot.register_next_step_handler(mensagem, echo)
+    menu(mensagem)
+    
+
+# chama o objeto BOT para ficar em execução, é responsável por verificar continuamente se o bot está recebendo novas mensagens
+bot.polling()

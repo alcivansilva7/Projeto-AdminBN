@@ -80,6 +80,20 @@ def listar_interface(mensagem):
 def cadastrar_usuario(mensagem):
     id_chat = mensagem.chat.id
     global logado
+    if logado:
+        selecoes.append("/cadastrar_usuario")
+        bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT:")
+        bot.register_next_step_handler(mensagem, usuario_hotspot)
+    else:
+        bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+
+def usuario_hotspot(mensagem):
+    id_chat = mensagem.chat.id
+    selecoes.append(mensagem.text)
+    bot.send_message(id_chat, "INFORME A SENHA DO HOTSPOT:")
+    bot.register_next_step_handler(mensagem, senha_hotspot)
+
+
 
 def menu(mensagem):
     id_chat = mensagem.chat.id

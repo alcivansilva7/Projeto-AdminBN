@@ -42,6 +42,15 @@ bot = telebot.TeleBot(CHAVE_API)
 #        else:
 #            bot.send_message(id_chat, "USUÁRIO OU SENHA INCORRETOS, CLIQUE AQUI PARA INICIAR: /iniciar")
 
+# Retorna True toda fez que a função for chamada
+def iniciar(mensagem):
+    return True
 
+# Chama a função default sempre que a função iniciar retornar True, é usada para que o BOT sempre esteja apto a responder o usuário com uma resposta padrão
+@bot.message_handler(func=iniciar)
+def default(mensagem):
+    bot.reply_to(mensagem,"""BEM VINDO AO ADMINBN
+VOCÊ DEVE SE AUTENTICAR PRIMEIRO!""")
 
-
+# chama o objeto BOT para ficar em execução, é responsável por verificar continuamente se o bot está recebendo novas mensagens
+bot.polling()

@@ -40,6 +40,7 @@ bot = telebot.TeleBot(os.getenv('BOT_CHAVE'))
 
 #Criando Menu de funcionalidades iniciais do BOT
 
+#função listar ips do lease do DHCP, quando o usuario clica em /listar ele chama essa função.
 @bot.message_handler(commands=["listar"])
 def listar_ips(mensagem):
     id_chat = mensagem.chat.id

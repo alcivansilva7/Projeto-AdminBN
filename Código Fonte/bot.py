@@ -79,6 +79,8 @@ def listar_interface(mensagem):
     else:
         bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
+
+#função cadastrar usuário no hotspost, quando o usuario clica em /cadastrar_usuário ele chama essa função.
 @bot.message_handler(commands=["cadastrar_usuario"])
 def cadastrar_usuario(mensagem):
     id_chat = mensagem.chat.id

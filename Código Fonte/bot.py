@@ -58,6 +58,8 @@ def listar_ips(mensagem):
     else:
         bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
+
+#função listar ips das interfaces, quando o usuario clica em /listar_interface ele chama essa função.
 @bot.message_handler(commands=["listar_interface"])
 def listar_interface(mensagem):
     id_chat = mensagem.chat.id

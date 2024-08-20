@@ -113,6 +113,8 @@ def senha_hotspot(mensagem):
         menu(mensagem)
     selecoes.clear()
 
+
+#função apagar usuário no hotspost, quando o usuario clica em /apgar_usuário ele chama essa função.
 @bot.message_handler(commands=["apagar_usuario"])
 def apagar_usuario(mensagem):
     id_chat = mensagem.chat.id

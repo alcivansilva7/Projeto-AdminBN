@@ -12,8 +12,8 @@ dados = []
 dicionario = {}
 
 def exec(socket_cliente, address):
-    while True:
-        try:
+    try:    
+        while True:
             #print('\n\n\n entrou no while')
             dados = json.loads(socket_cliente.recv(1024).decode())
             if isinstance(dados, dict):
@@ -28,9 +28,9 @@ def exec(socket_cliente, address):
                 elif dados == "/listar_interface":
                     envio = json.dumps(listar_enderecos())
                     socket_cliente.sendall(envio.encode())
-        except:
-            pass    
-        #socket_cliente.close()
+    except:
+        pass    
+        
 
 
 def main():

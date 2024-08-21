@@ -1,9 +1,10 @@
 import paramiko
 import re
+import os
 
-host = 'ip do mikrotik'
-username = 'usuario do mikrotik'
-password = 'senha do mikrotik'
+host = os.getenv('HOST_MIKROTIK')
+username = os.getenv('USER_MIKROTIK')
+password = os.getenv('PASSWORD_MIKROTIK')
 dados = []
 info = []
 def acesso(comandos):

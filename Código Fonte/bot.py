@@ -25,6 +25,21 @@ def usuario(mensagem):
     bot.send_message(id_chat, "INFORME A SENHA:")
     bot.register_next_step_handler(mensagem, senha)
 
+#função que verifica e loga o usuário
+def senha(mensagem):
+    global logado
+    id_chat = mensagem.chat.id
+    if id_chat in credenciais:
+        credenciais[id_chat]['senha'] = mensagem.text
+        dados_combinados = {'id_chat':id_chat,'credenciais':credenciais}
+        logado = abrir_conexao(dados_combinados)
+        if logado:
+            bot.send_message(id_chat, f"SEJA BEM VINDO(A) {credenciais[id_chat]['usuario']}!")
+            menu(mensagem)
+            
+        else:
+            bot.send_message(id_chat, "USUÁRIO OU SENHA INCORRETOS, CLIQUE AQUI PARA INICIAR: /iniciar")
+
 
 #função listar ips do lease do DHCP, quando o usuario clica em /listar ele chama essa função.
 @bot.message_handler(commands=["listar"])

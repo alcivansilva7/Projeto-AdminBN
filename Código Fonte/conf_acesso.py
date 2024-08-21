@@ -2,12 +2,12 @@ import paramiko
 import re
 import os
 
-host = os.getenv('HOST_MIKROTIK')
-username = os.getenv('USER_MIKROTIK')
-password = os.getenv('PASSWORD_MIKROTIK')
 dados = []
 info = []
 def acesso(comandos):
+    host = os.getenv('HOST_MIKROTIK')
+    username = os.getenv('USER_MIKROTIK')
+    password = os.getenv('PASSWORD_MIKROTIK')
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(hostname=host, username=username, password=password)

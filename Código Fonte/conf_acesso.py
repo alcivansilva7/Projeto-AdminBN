@@ -41,7 +41,7 @@ def listar_lease():
         ips = re.findall(r'\b\d{1,3}(?:\.\d{1,3}){3}\b', texto)
         for u in ips:
             dados.append(u)
-    return dados
+    return sorted(dados)
 
 def listar_enderecos():
     info.clear()

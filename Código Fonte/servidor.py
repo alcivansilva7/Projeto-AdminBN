@@ -1,7 +1,7 @@
 import socket
 import json
 from conf_acesso import *
-#from conexao import *
+from conexao import *
 from threading import Thread
 
 socket_servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,7 +17,10 @@ def exec(socket_cliente, address):
             #print('\n\n\n entrou no while')
             dados = json.loads(socket_cliente.recv(1024).decode())
             if isinstance(dados, dict):
-               pass
+                id_chat = dados['id_chat']
+                retorno = logar(dados['credenciais'][str(id_chat)]['usuario'], dados['credenciais'][str(id_chat)]['senha'])
+                envio = json.dumps(retorno)
+                socket_cliente.sendall(envio.encode())
             elif isinstance(dados, list):
                 pass
             else:

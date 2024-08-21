@@ -150,7 +150,7 @@ def menu(mensagem):
 def iniciar(mensagem):
     return True
 
-# Chama a função default sempre que a função iniciar retornar True, é usada para que o BOT sempre esteja apto a responder o usuário com uma resposta padrão
+# Chama a função default sempre que a função iniciar retornar True, é usada para que o BOT sempre esteja apto a responder o usuário com uma resposta padrão e solicitar autenticação
 @bot.message_handler(func=iniciar)
 def default(mensagem):
     id_chat = mensagem.chat.id

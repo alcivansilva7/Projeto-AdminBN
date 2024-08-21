@@ -5,20 +5,23 @@ import os
 dados = []
 info = []
 def acesso(comandos):
-    host = os.getenv('HOST_MIKROTIK')
-    username = os.getenv('USER_MIKROTIK')
-    password = os.getenv('PASSWORD_MIKROTIK')
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(hostname=host, username=username, password=password)
-    stdin, stdout, stderr = ssh.exec_command(comandos)
-    linhas = stdout.readlines()
-    stdin.close()
-    ssh.close()
-    if not linhas:
-        return "comando realizado com sucesso"
-    else:
-        return linhas
+    try:
+        host = os.getenv('HOST_MIKROTIK')
+        username = os.getenv('USER_MIKROTIK')
+        password = os.getenv('PASSWORD_MIKROTIK')
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname=host, username=username, password=password)
+        stdin, stdout, stderr = ssh.exec_command(comandos)
+        linhas = stdout.readlines()
+        stdin.close()
+        ssh.close()
+        if not linhas:
+            return "comando realizado com sucesso"
+        else:
+            return linhas
+    except:
+        return 'houve um erro de comunicação com o mikrotik'
 
 def cadastrar_hotspot(usuario,senha):
     comando = f'ip hotspot user add server=hotspot1 name={usuario} password={senha} profile=default'

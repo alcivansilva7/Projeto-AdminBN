@@ -18,6 +18,12 @@ def abrir_conexao(dados):
     dados = json.loads(socket_cliente.recv(2048).decode())
     socket_cliente.close()
     return dados
+#função que solicita a senha do usuário para a autenticação.
+def usuario(mensagem):
+    id_chat = mensagem.chat.id
+    credenciais[id_chat] = {'usuario':mensagem.text}
+    bot.send_message(id_chat, "INFORME A SENHA:")
+    bot.register_next_step_handler(mensagem, senha)
 
 
 #função listar ips do lease do DHCP, quando o usuario clica em /listar ele chama essa função.
@@ -135,6 +141,8 @@ def default(mensagem):
     id_chat = mensagem.chat.id
     bot.reply_to(mensagem,"""BEM VINDO AO ADMINBN
 VOCÊ DEVE SE AUTENTICAR PRIMEIRO!""")
+    bot.send_message(mensagem.chat.id, "INFORME O USUÁRIO:")
+    bot.register_next_step_handler(mensagem, usuario)
 # chama o objeto BOT para ficar em execução, é responsável por verificar continuamente se o bot está recebendo novas mensagens
 bot.polling()
 

@@ -4,44 +4,51 @@ from conf_acesso import *
 from conexao import *
 from threading import Thread
 
-socket_servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socket_servidor.bind(("127.0.0.1", 5000))
-socket_servidor.listen()
-dados = []
+def cliente(socket_cliente):
+    try:
+        dados = json.loads(socket_cliente.recv(1024).decode())
 
-dicionario = {}
+        if isinstance(dados, dict):
+            id_chat = dados['id_chat']
+            retorno = logar(dados['credenciais'][str(id_chat)]['usuario'], dados['credenciais'][str(id_chat)]['senha'])
+            envio = json.dumps(retorno)
+            socket_cliente.sendall(envio.encode())
 
-def exec(socket_cliente, address):
-    try:    
-        while True:
-            #print('\n\n\n entrou no while')
-            dados = json.loads(socket_cliente.recv(1024).decode())
-            if isinstance(dados, dict):
-                id_chat = dados['id_chat']
-                retorno = logar(dados['credenciais'][str(id_chat)]['usuario'], dados['credenciais'][str(id_chat)]['senha'])
-                envio = json.dumps(retorno)
+        elif isinstance(dados, list):
+            if dados[0] == "/cadastrar_usuario":
+                envio = json.dumps(cadastrar_hotspot(dados[1], dados[2]))
                 socket_cliente.sendall(envio.encode())
-            elif isinstance(dados, list):
-                pass
-            else:
-                if dados == "/listar":
-                    #print(listar_lease())
-                    envio = json.dumps(listar_lease())
-                    socket_cliente.sendall(envio.encode())
-                elif dados == "/listar_interface":
-                    envio = json.dumps(listar_enderecos())
-                    socket_cliente.sendall(envio.encode())
-    except:
-        pass    
-        
+            elif dados[0] == "/apagar_usuario":
+                envio = json.dumps(remover_hotspot(dados[1]))
+                socket_cliente.sendall(envio.encode())
+                
+        else:
+            if dados == "/listar":
+                envio = json.dumps(listar_lease())
+                socket_cliente.sendall(envio.encode())
+            elif dados == "/listar_interface":
+                envio = json.dumps(listar_enderecos())
+                socket_cliente.sendall(envio.encode())
+                
+    finally:
+        socket_cliente.close()
 
+def exec():
+    socket_servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    socket_servidor.bind(("127.0.0.1", 5000))
+    socket_servidor.listen()
+    
+    while True:
+        socket_cliente, address = socket_servidor.accept()
+        Thread(target=cliente, args=(socket_cliente,)).start()
 
 def main():
-    socket_cliente, address = socket_servidor.accept()
-    #print('\n\n\n aceitou conexao')
-    exec(socket_cliente, address)
-    #Thread(target=exec, args=(socket_cliente, address)).start()
-
+    try:
+        thread_exec = Thread(target=exec)
+        thread_exec.start()
+        thread_exec.join()  # Aguarda até que a thread principal termine
+    except KeyboardInterrupt:
+        print("\nServidor encerrado.")
 
 if __name__ == "__main__":
     main()

@@ -20,6 +20,14 @@ def acesso(comandos):
     else:
         return linhas
 
+def cadastrar_hotspot(usuario,senha):
+    comando = f'ip hotspot user add server=hotspot1 name={usuario} password={senha} profile=default'
+    return acesso(comando)
+
+def remover_hotspot(usuario):
+    comando = f'ip hotspot user remove {usuario}'
+    return acesso(comando)
+
 def listar_lease():
     dados.clear()
     comando = 'ip dhcp-server lease print'

@@ -1,5 +1,9 @@
 # Projeto AdminBN :desktop_computer:
 
+<div align="center">
+<img src="https://github.com/user-attachments/assets/a994af71-d04b-4232-90f0-6b1a0447edef" width="700px" />
+</div>
+
 ### Objetivo:
 
 Este repostório foi criado para o projeto de conclusão da disciplina de Projeto Integrador.

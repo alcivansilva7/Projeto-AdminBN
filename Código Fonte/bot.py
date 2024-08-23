@@ -2,6 +2,7 @@
 import telebot, os
 import socket
 import json
+import time
 
 credenciais = {}
 selecoes = []
@@ -12,7 +13,7 @@ bot = telebot.TeleBot(os.getenv('BOT_CHAVE'))
 
 def abrir_conexao(dados):
     socket_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socket_cliente.connect(("localhost", 5000))
+    socket_cliente.connect(("servidor", 5000))
     dados = json.dumps(dados)
     socket_cliente.sendall(dados.encode())
     dados = json.loads(socket_cliente.recv(2048).decode())
@@ -158,6 +159,15 @@ def default(mensagem):
 VOCÊ DEVE SE AUTENTICAR PRIMEIRO!""")
     bot.send_message(mensagem.chat.id, "INFORME O USUÁRIO:")
     bot.register_next_step_handler(mensagem, usuario)
-# chama o objeto BOT para ficar em execução, é responsável por verificar continuamente se o bot está recebendo novas mensagens
-bot.polling()
 
+# chama o objeto BOT para ficar em execução, é responsável por verificar continuamente se o bot está recebendo novas mensagens
+def iniciar_bot():
+    while True:
+        try:
+            bot.polling(none_stop=True, timeout=60, long_polling_timeout=30)
+        except Exception as e:
+            print(f"Ocorreu um erro: {e}")
+            time.sleep(15)  # Espera 15 segundos antes de tentar novamente
+
+# Inicia o bot
+iniciar_bot()

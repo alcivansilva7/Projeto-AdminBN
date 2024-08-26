@@ -28,6 +28,13 @@ def abrir_conexao(dados):
     dados = json.loads(socket_cliente.recv(4096).decode())
     socket_cliente.close()
     return dados
+
+def registrar_log(username, comando):
+    logging.info(f'Comando executado: {comando}', extra={'username': username})
+
+
+
+
 #função que solicita a senha do usuário para a autenticação.
 def usuario(mensagem):
     id_chat = mensagem.chat.id

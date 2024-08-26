@@ -1,0 +1,35 @@
+version: '3'
+services:
+  servidor:
+    build:
+      context: ./servidor
+      dockerfile: Dockerfile
+    image: servidor
+    container_name: servidor
+    env_file:
+      - config.env
+    ports:
+      - "5000:5000"
+    networks:
+      - adminbn
+    volumes:
+      - ../codigo_fonte:/app
+
+  bot:
+    build:
+      context: ./BOT
+      dockerfile: Dockerfile
+    image: bot
+    container_name: bot
+    env_file:
+      - config.env
+    #ports:
+    #  - "5000:5000"
+    networks:
+      - adminbn
+    volumes:
+      - ../codigo_fonte:/app
+
+networks:
+  adminbn:
+    driver: bridge

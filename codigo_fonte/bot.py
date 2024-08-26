@@ -29,6 +29,7 @@ def abrir_conexao(dados):
     socket_cliente.close()
     return dados
 
+# Função para registrar o log dos comandos
 def registrar_log(username, comando):
     logging.info(f'Comando executado: {comando}', extra={'username': username})
 
@@ -67,6 +68,7 @@ def listar_ips(mensagem):
     if logado:
         dados = "/listar"
         retorno = abrir_conexao(dados)
+        registrar_log(credenciais[id_chat]['usuario'], dados)
         if not retorno:
             bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
             menu(mensagem)
@@ -86,6 +88,7 @@ def listar_interface(mensagem):
     if logado:
         dados = "/listar_interface"
         retorno = abrir_conexao(dados)
+        registrar_log(credenciais[id_chat]['usuario'], dados)
         if not retorno:
             bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
             menu(mensagem)

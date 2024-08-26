@@ -3,10 +3,19 @@ import telebot, os
 import socket
 import json
 import time
+import logging
+from datetime import datetime
 
 credenciais = {}
 selecoes = []
 logado = False
+
+logging.basicConfig(
+    filename='bot_commandos.log', # Endereço e Nome do arquivo de Log
+    level=logging.INFO, # Nível de severidade dos Logs
+    format='%(asctime)s - %(username)s - %(message)s' # Formado das mensagens do Log
+)
+
 #chamando a chave API do BOT que foi armazenada numa variável de ambbiente por segurança
 bot = telebot.TeleBot(os.getenv('BOT_CHAVE'))
 

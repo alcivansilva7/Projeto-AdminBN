@@ -122,6 +122,7 @@ def senha_hotspot(mensagem):
     id_chat = mensagem.chat.id
     selecoes.append(mensagem.text)
     retorno = abrir_conexao(selecoes)
+    registrar_log(credenciais[id_chat]['usuario'], selecoes[0])
     if retorno == "comando realizado com sucesso":
         bot.send_message(id_chat, "USUARIO CADASTRADO COM SUCESSO!")
         menu(mensagem)

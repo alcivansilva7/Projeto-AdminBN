@@ -27,6 +27,9 @@ def cliente(socket_cliente):
             elif dados[0] == "/verificar":
                 envio = json.dumps(verifica_login(dados[1]))
                 socket_cliente.sendall(envio.encode())
+            elif dados[0] == "/nivel":
+                envio = json.dumps(consulta_nivel(dados[1]))
+                socket_cliente.sendall(envio.encode())
                 
         else:
             if dados == "/listar":

@@ -8,7 +8,6 @@ from datetime import datetime
 
 credenciais = {}
 selecoes = []
-logado = False
 
 logging.basicConfig(
     filename='bot_commandos.log', # Endereço e Nome do arquivo de Log
@@ -53,7 +52,7 @@ def senha(mensagem):
         bot.delete_message(id_chat,mensagem.message_id)
         logado = abrir_conexao(dados_combinados)
         if logado:
-            menu(mensagem)
+            menu2(mensagem)
             
         else:
             bot.send_message(id_chat, "USUÁRIO OU SENHA INCORRETOS, CLIQUE AQUI PARA INICIAR: /iniciar")
@@ -182,7 +181,17 @@ def menu(mensagem):
 /apagar_usuario    APAGA UM USUÁRIO NO HOTSPOT
 /logout            DESCONECTAR USUÁRIO
                              """)
-
+def menu2(mensagem):
+    id_chat = mensagem.chat.id
+    dic_menu = {"/listar":{'desc':'LISTA TODOS OS IPs QUE ESTÃO NO LEASE DO DHCP', 'nivel':1},
+                "/listar_interface":{'desc':'LISTA TODOS OS IPs DAS INTERFACES DE REDE', 'nivel':1},
+                "/cadastrar_usuario":{'desc':'CADASTRA UM USUÁRIO NO HOTSPOT', 'nivel':2},
+                "/apagar_usuario":{'desc':'APAGA UM USUÁRIO NO HOTSPOT', 'nivel':2},
+                "/logout":{'desc':'DESCONECTAR USUÁRIO', 'nivel':1}}
+    envio = ["/nivel", credenciais[id_chat]['usuario']]
+    retorno = abrir_conexao(envio)
+    filtro = dict(filter(lambda item: item[1]['nivel'] == retorno[0], dic_menu.items()))
+    print(filtro)
 @bot.message_handler(commands=["logout"])
 def logout(mensagem):
     id_chat = mensagem.chat.id

@@ -43,10 +43,18 @@ def verifica_login(usuario):
         else:
             return False
 
+def consulta_nivel(usuario):
+    with cria_conexao() as conexao:
+        conexao.row_factory = sqlite3.Row
+        cur = conexao.execute("SELECT nivel FROM users WHERE user=?",(usuario,))
+        resultado = cur.fetchone()
+        resultado = list(resultado)
+        return resultado
+
 def logout(usuario):
     with cria_conexao() as conexao:
         conexao.row_factory =  sqlite3.Row
-        cur = conexao.execute("UPDATE users SET logado=0 WHERE user=?",(usuario,))
+        cur = conexao.execute("UPDATE users SET logado=0 WHERE user=?",(usuario))
         return True
 
 #insere usuários no banco se a função for chamada

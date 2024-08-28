@@ -22,7 +22,7 @@ bot = telebot.TeleBot(os.getenv('BOT_CHAVE'))
 
 def abrir_conexao(dados):
     socket_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socket_cliente.connect(("servidor", 5000))
+    socket_cliente.connect(("127.0.0.1", 5000))
     dados = json.dumps(dados)
     socket_cliente.sendall(dados.encode())
     dados = json.loads(socket_cliente.recv(4096).decode())
@@ -40,12 +40,12 @@ def registrar_log(username, comando):
 def usuario(mensagem):
     id_chat = mensagem.chat.id
     credenciais[id_chat] = {'usuario':mensagem.text}
+    bot.delete_message(id_chat,mensagem.message_id)
     bot.send_message(id_chat, "INFORME A SENHA:")
     bot.register_next_step_handler(mensagem, senha)
 
 #função que verifica e loga o usuário
 def senha(mensagem):
-    global logado
     id_chat = mensagem.chat.id
     if id_chat in credenciais:
         credenciais[id_chat]['senha'] = mensagem.text
@@ -53,7 +53,6 @@ def senha(mensagem):
         bot.delete_message(id_chat,mensagem.message_id)
         logado = abrir_conexao(dados_combinados)
         if logado:
-            bot.send_message(id_chat, f"SEJA BEM VINDO(A) {credenciais[id_chat]['usuario']}!")
             menu(mensagem)
             
         else:
@@ -64,53 +63,65 @@ def senha(mensagem):
 @bot.message_handler(commands=["listar"])
 def listar_ips(mensagem):
     id_chat = mensagem.chat.id
-    global logado
-    if logado:
-        dados = "/listar"
-        retorno = abrir_conexao(dados)
-        registrar_log(credenciais[id_chat]['usuario'], dados)
-        if not retorno:
-            bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
-            menu(mensagem)
-        else:
-            saida = "\n".join(retorno)
-            bot.send_message(id_chat, saida)
-            menu(mensagem)
-    else:
+    if not credenciais:
         bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+    else:
+        dados = ['/verificar', credenciais[id_chat]['usuario']]
+        logado = abrir_conexao(dados)
+        if logado:
+            dados = "/listar"
+            retorno = abrir_conexao(dados)
+            registrar_log(credenciais[id_chat]['usuario'], dados)
+            if not retorno:
+                bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
+                menu(mensagem)
+            else:
+                saida = "\n".join(retorno)
+                bot.send_message(id_chat, saida)
+                menu(mensagem)
+        else:
+            bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
 
 #função listar ips das interfaces, quando o usuario clica em /listar_interface ele chama essa função.
 @bot.message_handler(commands=["listar_interface"])
 def listar_interface(mensagem):
     id_chat = mensagem.chat.id
-    global logado
-    if logado:
-        dados = "/listar_interface"
-        retorno = abrir_conexao(dados)
-        registrar_log(credenciais[id_chat]['usuario'], dados)
-        if not retorno:
-            bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
-            menu(mensagem)
-        else:
-            saida = "\n".join(retorno)
-            bot.send_message(id_chat, saida)
-            menu(mensagem)
-    else:
+    if not credenciais:
         bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+    else:
+        dados = ['/verificar', credenciais[id_chat]['usuario']]
+        logado = abrir_conexao(dados)
+        if logado:
+            dados = "/listar_interface"
+            retorno = abrir_conexao(dados)
+            registrar_log(credenciais[id_chat]['usuario'], dados)
+            if not retorno:
+                bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
+                menu(mensagem)
+            else:
+                saida = "\n".join(retorno)
+                bot.send_message(id_chat, saida)
+                menu(mensagem)
+        else:
+            bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
 
 #função cadastrar usuário no hotspost, quando o usuario clica em /cadastrar_usuário ele chama essa função.
 @bot.message_handler(commands=["cadastrar_usuario"])
 def cadastrar_usuario(mensagem):
     id_chat = mensagem.chat.id
-    global logado
-    if logado:
-        selecoes.append("/cadastrar_usuario")
-        bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT:")
-        bot.register_next_step_handler(mensagem, usuario_hotspot)
-    else:
+    if not credenciais:
         bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+    else:
+        dados = ['/verificar', credenciais[id_chat]['usuario']]
+        logado = abrir_conexao(dados)
+        if logado:
+            selecoes.append("/cadastrar_usuario")
+            bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT:")
+            bot.register_next_step_handler(mensagem, usuario_hotspot)
+        else:
+            bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
 def usuario_hotspot(mensagem):
     id_chat = mensagem.chat.id
@@ -136,13 +147,17 @@ def senha_hotspot(mensagem):
 @bot.message_handler(commands=["apagar_usuario"])
 def apagar_usuario(mensagem):
     id_chat = mensagem.chat.id
-    global logado
-    if logado:
-        selecoes.append("/apagar_usuario")
-        bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT A SER APAGADO:")
-        bot.register_next_step_handler(mensagem, usuario_apagar)
-    else:
+    if not credenciais:
         bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+    else:
+        dados = ['/verificar', credenciais[id_chat]['usuario']]
+        logado = abrir_conexao(dados)
+        if logado:
+            selecoes.append("/apagar_usuario")
+            bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT A SER APAGADO:")
+            bot.register_next_step_handler(mensagem, usuario_apagar)
+        else:
+            bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
 def usuario_apagar(mensagem):
     id_chat = mensagem.chat.id
@@ -165,9 +180,21 @@ def menu(mensagem):
 /listar_interface  LISTA TODOS OS IPs DAS INTERFACES DE REDE
 /cadastrar_usuario CADASTRA UM USUÁRIO NO HOTSPOT
 /apagar_usuario    APAGA UM USUÁRIO NO HOTSPOT
+/logout            DESCONECTAR USUÁRIO
                              """)
 
-
+@bot.message_handler(commands=["logout"])
+def logout(mensagem):
+    id_chat = mensagem.chat.id
+    if not credenciais:
+        bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+    else:
+        dados = ['/logout', credenciais[id_chat]['usuario']]
+        retorno = abrir_conexao(dados)
+        if retorno:
+            bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+        else:
+            bot.send_message(id_chat, "HOUVE UM ERRO AO FAZER O LOGOUT")
 
 # Retorna True toda fez que a função for chamada
 def iniciar(mensagem):
@@ -183,7 +210,7 @@ VOCÊ DEVE SE AUTENTICAR PRIMEIRO!""")
     bot.register_next_step_handler(mensagem, usuario)
 
 # chama o objeto BOT para ficar em execução, é responsável por verificar continuamente se o bot está recebendo novas mensagens
-def iniciar_bot():
+'''def iniciar_bot():
     while True:
         try:
             bot.polling(none_stop=True, timeout=60, long_polling_timeout=30)
@@ -192,4 +219,5 @@ def iniciar_bot():
             time.sleep(15)  # Espera 15 segundos antes de tentar novamente
 
 # Inicia o bot
-iniciar_bot()
+iniciar_bot()'''
+bot.polling()

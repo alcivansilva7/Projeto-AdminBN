@@ -21,6 +21,12 @@ def cliente(socket_cliente):
             elif dados[0] == "/apagar_usuario":
                 envio = json.dumps(remover_hotspot(dados[1]))
                 socket_cliente.sendall(envio.encode())
+            elif dados[0] == "/logout":
+                envio = json.dumps(logout(dados[1]))
+                socket_cliente.sendall(envio.encode())
+            elif dados[0] == "/verificar":
+                envio = json.dumps(verifica_login(dados[1]))
+                socket_cliente.sendall(envio.encode())
                 
         else:
             if dados == "/listar":

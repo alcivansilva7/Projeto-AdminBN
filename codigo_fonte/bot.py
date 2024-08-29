@@ -21,7 +21,7 @@ bot = telebot.TeleBot(os.getenv('BOT_CHAVE'))
 
 def abrir_conexao(dados):
     socket_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socket_cliente.connect(("127.0.0.1", 5000))
+    socket_cliente.connect(("servidor", 5000))
     dados = json.dumps(dados)
     socket_cliente.sendall(dados.encode())
     dados = json.loads(socket_cliente.recv(4096).decode())

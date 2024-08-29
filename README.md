@@ -1,7 +1,7 @@
 # Projeto AdminBN :desktop_computer:
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/a994af71-d04b-4232-90f0-6b1a0447edef" width="700px" />
+<img src="https://github.com/user-attachments/assets/4706ddd2-b599-40db-b7b8-9ade0c408719" width="700px" />
 </div>
 
 ### Objetivo:

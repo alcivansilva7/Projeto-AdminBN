@@ -70,15 +70,21 @@ def listar_ips(mensagem):
         dados = ['/verificar', credenciais[id_chat]['usuario']]
         logado = abrir_conexao(dados)
         if logado:
-            dados = "/listar"
-            retorno = abrir_conexao(dados)
-            registrar_log(credenciais[id_chat]['usuario'], dados)
-            if not retorno:
-                bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
-                menu(mensagem)
+            dados2 = ['/nivel', credenciais[id_chat]['usuario']]
+            verifica_nivel = abrir_conexao(dados2)
+            if 1 <= verifica_nivel[0]:
+                dados = "/listar"
+                retorno = abrir_conexao(dados)
+                registrar_log(credenciais[id_chat]['usuario'], dados)
+                if not retorno:
+                    bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
+                    menu(mensagem)
+                else:
+                    saida = "\n".join(retorno)
+                    bot.send_message(id_chat, saida)
+                    menu(mensagem)
             else:
-                saida = "\n".join(retorno)
-                bot.send_message(id_chat, saida)
+                bot.send_message(id_chat, "VOCÊ NÃO TEM PERMISSÃO PRA ACESSAR ESSA FUNÇÃO!")
                 menu(mensagem)
         else:
             bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
@@ -94,15 +100,21 @@ def listar_interface(mensagem):
         dados = ['/verificar', credenciais[id_chat]['usuario']]
         logado = abrir_conexao(dados)
         if logado:
-            dados = "/listar_interface"
-            retorno = abrir_conexao(dados)
-            registrar_log(credenciais[id_chat]['usuario'], dados)
-            if not retorno:
-                bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
-                menu(mensagem)
+            dados2 = ['/nivel', credenciais[id_chat]['usuario']]
+            verifica_nivel = abrir_conexao(dados2)
+            if 1 <= verifica_nivel[0]:
+                dados = "/listar_interface"
+                retorno = abrir_conexao(dados)
+                registrar_log(credenciais[id_chat]['usuario'], dados)
+                if not retorno:
+                    bot.send_message(id_chat, "PARECE QUE HOUVE UM ERRO")
+                    menu(mensagem)
+                else:
+                    saida = "\n".join(retorno)
+                    bot.send_message(id_chat, saida)
+                    menu(mensagem)
             else:
-                saida = "\n".join(retorno)
-                bot.send_message(id_chat, saida)
+                bot.send_message(id_chat, "VOCÊ NÃO TEM PERMISSÃO PRA ACESSAR ESSA FUNÇÃO!")
                 menu(mensagem)
         else:
             bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
@@ -118,9 +130,15 @@ def cadastrar_usuario(mensagem):
         dados = ['/verificar', credenciais[id_chat]['usuario']]
         logado = abrir_conexao(dados)
         if logado:
-            selecoes.append("/cadastrar_usuario")
-            bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT:")
-            bot.register_next_step_handler(mensagem, usuario_hotspot)
+            dados2 = ['/nivel', credenciais[id_chat]['usuario']]
+            verifica_nivel = abrir_conexao(dados2)
+            if 2 <= verifica_nivel[0]:
+                selecoes.append("/cadastrar_usuario")
+                bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT:")
+                bot.register_next_step_handler(mensagem, usuario_hotspot)
+            else:
+                bot.send_message(id_chat, "VOCÊ NÃO TEM PERMISSÃO PRA ACESSAR ESSA FUNÇÃO!")
+                menu(mensagem)
         else:
             bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
@@ -154,9 +172,15 @@ def apagar_usuario(mensagem):
         dados = ['/verificar', credenciais[id_chat]['usuario']]
         logado = abrir_conexao(dados)
         if logado:
-            selecoes.append("/apagar_usuario")
-            bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT A SER APAGADO:")
-            bot.register_next_step_handler(mensagem, usuario_apagar)
+            dados2 = ['/nivel', credenciais[id_chat]['usuario']]
+            verifica_nivel = abrir_conexao(dados2)
+            if 2 <= verifica_nivel[0]:
+                selecoes.append("/apagar_usuario")
+                bot.send_message(id_chat, "INFORME O USUARIO DO HOTSPOT A SER APAGADO:")
+                bot.register_next_step_handler(mensagem, usuario_apagar)
+            else:
+                bot.send_message(id_chat, "VOCÊ NÃO TEM PERMISSÃO PRA ACESSAR ESSA FUNÇÃO!")
+                menu(mensagem)
         else:
             bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
@@ -173,8 +197,7 @@ def usuario_apagar(mensagem):
         menu(mensagem)
     selecoes.clear()
 
-
-def menu2(mensagem):
+'''def menu2(mensagem):
     id_chat = mensagem.chat.id
     bot.send_message(id_chat, """ESCOLHA A OPÇÃO DESEJADA:
 /listar LISTA TODOS OS IPs QUE ESTÃO NO LEASE DO DHCP
@@ -182,18 +205,20 @@ def menu2(mensagem):
 /cadastrar_usuario CADASTRA UM USUÁRIO NO HOTSPOT
 /apagar_usuario    APAGA UM USUÁRIO NO HOTSPOT
 /logout            DESCONECTAR USUÁRIO
-                             """)
+                             """)'''
 def menu(mensagem):
     id_chat = mensagem.chat.id
     dic_menu = {"/listar":{'desc':'LISTA TODOS OS IPs QUE ESTÃO NO LEASE DO DHCP', 'nivel':1},
                 "/listar_interface":{'desc':'LISTA TODOS OS IPs DAS INTERFACES DE REDE', 'nivel':1},
                 "/cadastrar_usuario":{'desc':'CADASTRA UM USUÁRIO NO HOTSPOT', 'nivel':2},
                 "/apagar_usuario":{'desc':'APAGA UM USUÁRIO NO HOTSPOT', 'nivel':2},
+                "/bot_cadastrar":{'desc':'CADASTRA UM USUÁRIO DO BOT', 'nivel':3},
+                "/bot_apagar":{'desc':'APAGA UM USUÁRIO DO BOT', 'nivel':3},
+                "/bot_atualizar":{'desc':'ATUALIZA A PERMISSÃO DE UM USUÁRIO DO BOT', 'nivel':3},
                 "/logout":{'desc':'DESCONECTAR USUÁRIO', 'nivel':1}}
     envio = ["/nivel", credenciais[id_chat]['usuario']]
     retorno = abrir_conexao(envio)
     filtro = dict(filter(lambda item: item[1]['nivel'] <= retorno[0], dic_menu.items()))
-    print(filtro)
     menu = '\n'.join(f"""{chave}  {descricao['desc']}""" for chave, descricao in filtro.items())
     menu_final = "ESCOLHA A OPÇÃO DESEJADA:\n\n"+ menu
     bot.send_message(id_chat,menu_final)

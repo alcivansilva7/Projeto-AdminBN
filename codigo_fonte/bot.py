@@ -262,14 +262,20 @@ def nivel_bot_cadastrar(mensagem):
     id_chat = mensagem.chat.id
     selecoes.append(mensagem.text)
     bot.delete_message(id_chat,mensagem.message_id)
-    retorno = abrir_conexao(selecoes)
-    if retorno:
-        bot.send_message(id_chat, "USUÁRIO CADASTRADO COM SUCESSO!")
-        menu(mensagem)
+    if int(selecoes[3]) in range(1,4):
+        retorno = abrir_conexao(selecoes)
+        if retorno:
+            bot.send_message(id_chat, "USUÁRIO CADASTRADO COM SUCESSO!")
+            menu(mensagem)
+        else:
+            bot.send_message(id_chat, "USUÁRIO JÁ EXISTE!")
+            menu(mensagem)
+        selecoes.clear()
     else:
-        bot.send_message(id_chat, "USUÁRIO JÁ EXISTE!")
-        menu(mensagem)
-    selecoes.clear()
+        selecoes.clear()
+        bot.send_message(id_chat, "O NIVEL DE PERMISSÃO INFORMADO NÃO É VÁLIDO!")
+        bot_cadastrar(mensagem)
+
 
 @bot.message_handler(commands=["bot_apagar"])
 def bot_apagar(mensagem):
@@ -338,14 +344,19 @@ def usuario_bot_nivel(mensagem):
     id_chat = mensagem.chat.id
     selecoes.append(mensagem.text)
     bot.delete_message(id_chat,mensagem.message_id)
-    retorno = abrir_conexao(selecoes)
-    if retorno:
-        bot.send_message(id_chat, "PERMISSÃO ALTERADA COM SUCESSO!")
-        menu(mensagem)
+    if int(selecoes[2]) in range(1,4):
+        retorno = abrir_conexao(selecoes)
+        if retorno:
+            bot.send_message(id_chat, "PERMISSÃO ALTERADA COM SUCESSO!")
+            menu(mensagem)
+        else:
+            bot.send_message(id_chat, "USUÁRIO INEXISTENTE!")
+            menu(mensagem)
+        selecoes.clear()
     else:
-        bot.send_message(id_chat, "USUÁRIO INEXISTENTE!")
-        menu(mensagem)
-    selecoes.clear()
+        selecoes.clear()
+        bot.send_message(id_chat, "O NIVEL DE PERMISSÃO INFORMADO NÃO É VÁLIDO!")
+        bot_permissao(mensagem)
 
 @bot.message_handler(commands=["logout"])
 def logout(mensagem):

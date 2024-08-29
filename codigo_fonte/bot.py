@@ -52,9 +52,11 @@ def senha(mensagem):
         bot.delete_message(id_chat,mensagem.message_id)
         logado = abrir_conexao(dados_combinados)
         if logado:
+            logging.info(f'Usuário {credenciais[id_chat]["usuario"]} se autenticou com sucesso.', extra={'username': credenciais[id_chat]['usuario']})
             menu(mensagem)
             
         else:
+            logging.warning(f'Tentativa de login com usuário {credenciais[id_chat]["usuario"]}', extra={'username': credenciais[id_chat]['usuario']})
             bot.send_message(id_chat, "USUÁRIO OU SENHA INCORRETOS, CLIQUE AQUI PARA INICIAR: /iniciar")
 
 
@@ -207,8 +209,10 @@ def logout(mensagem):
         dados = ['/logout', credenciais[id_chat]['usuario']]
         retorno = abrir_conexao(dados)
         if retorno:
+            logging.info(f'Usuário {credenciais[id_chat]["usuario"]} fez logout com sucesso.', extra={'username': credenciais[id_chat]['usuario']})
             bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
         else:
+            logging.error(f'Houve um erro ao tentar fazer logout do usuário {credenciais[id_chat]["usuario"]}.', extra={'username': credenciais[id_chat]['usuario']})
             bot.send_message(id_chat, "HOUVE UM ERRO AO FAZER O LOGOUT")
 
 # Retorna True toda fez que a função for chamada

@@ -87,8 +87,7 @@ Realizar testes extensivos para garantir a estabilidade e funcionalidade dos nov
 
 Sprint 5: Testes e Ajustes
 
-Realizar testes de funcionalidade e usabilidade da solução em ambientes simulados e reais de redes de pequeno porte.
-Coletar feedback dos usuários e realizar ajustes necessários com base nos resultados dos testes.
+Realizar correções de Bugs e implementar possíveis novas funções que venham a surgir, de acordo com os problemas enfrentados no Sprint Anterior
 
 
 Sprint 6: Avaliação e Entrega Final

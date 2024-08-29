@@ -30,6 +30,15 @@ def cliente(socket_cliente):
             elif dados[0] == "/nivel":
                 envio = json.dumps(consulta_nivel(dados[1]))
                 socket_cliente.sendall(envio.encode())
+            elif dados[0] == "/bot_cadastrar":
+                envio = json.dumps(cadastro(dados[1], dados[2], dados[3]))
+                socket_cliente.sendall(envio.encode())
+            elif dados[0] == "/bot_apagar":
+                envio = json.dumps(apagar_usuario(dados[1]))
+                socket_cliente.sendall(envio.encode())
+            elif dados[0] == "/bot_permissao":
+                envio = json.dumps(atualiza_permissao(dados[1], dados[2]))
+                socket_cliente.sendall(envio.encode())
                 
         else:
             if dados == "/listar":

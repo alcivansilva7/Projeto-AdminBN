@@ -58,12 +58,35 @@ def logout(usuario):
         return True
 
 #insere usuários no banco se a função for chamada
-def cadastro():
-    with cria_conexao() as conexao:
-        cur = conexao.execute("INSERT INTO users (user, password_user, nivel)"
-        "VALUES('mizael', '123456','1')")
-    return True
-
+def cadastro(usuario, senha, nivel):
+    try:
+        with cria_conexao() as conexao:
+            conexao.execute("INSERT INTO users (user, password_user, nivel) VALUES(?, ?, ?)",(usuario, senha, nivel))
+        return True
+    except:
+        return False
+def apagar_usuario(usuario):
+    try:
+        with cria_conexao() as conexao:
+            cur = conexao.execute("DELETE FROM users WHERE user = ?",(usuario,))
+             # Verifica se algum registro foi deletado
+            if cur.rowcount > 0:
+                return True  # Retorna True se o usuário foi deletado
+            else:
+                return False  # Retorna False se nenhum registro foi deletado
+    except:
+        return False
+def atualiza_permissao(usuario, permissao):
+    try:
+        with cria_conexao() as conexao:
+            cur = conexao.execute("UPDATE users SET nivel = ? WHERE user = ?", (permissao, usuario))
+         # Verifica se algum registro foi atualizado
+            if cur.rowcount > 0:
+                return True   # Retorna True se a permissão foi atualizada
+            else:
+                return False  # Retorna False se nenhum registro foi atualizado
+    except:
+        return False
 
 if __name__ == "__main__":
     pass

@@ -214,7 +214,7 @@ def menu(mensagem):
                 "/apagar_usuario":{'desc':'APAGA UM USUÁRIO NO HOTSPOT', 'nivel':2},
                 "/bot_cadastrar":{'desc':'CADASTRA UM USUÁRIO DO BOT', 'nivel':3},
                 "/bot_apagar":{'desc':'APAGA UM USUÁRIO DO BOT', 'nivel':3},
-                "/bot_atualizar":{'desc':'ATUALIZA A PERMISSÃO DE UM USUÁRIO DO BOT', 'nivel':3},
+                "/bot_permissao":{'desc':'ATUALIZA A PERMISSÃO DE UM USUÁRIO DO BOT', 'nivel':3},
                 "/logout":{'desc':'DESCONECTAR USUÁRIO', 'nivel':1}}
     envio = ["/nivel", credenciais[id_chat]['usuario']]
     retorno = abrir_conexao(envio)
@@ -223,7 +223,129 @@ def menu(mensagem):
     menu_final = "ESCOLHA A OPÇÃO DESEJADA:\n\n"+ menu
     bot.send_message(id_chat,menu_final)
 
+@bot.message_handler(commands=["bot_cadastrar"])
+def bot_cadastrar(mensagem):
+    id_chat = mensagem.chat.id
+    if not credenciais:
+        bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+    else:
+        dados = ['/verificar', credenciais[id_chat]['usuario']]
+        logado = abrir_conexao(dados)
+        if logado:
+            dados2 = ['/nivel', credenciais[id_chat]['usuario']]
+            verifica_nivel = abrir_conexao(dados2)
+            if 3 <= verifica_nivel[0]:
+                selecoes.append("/bot_cadastrar")
+                bot.send_message(id_chat, "INFORME O USUÁRIO DO BOT A SER CADASTRADO:")
+                bot.register_next_step_handler(mensagem, usuario_bot_cadastrar)
+            else:
+                bot.send_message(id_chat, "VOCÊ NÃO TEM PERMISSÃO PRA ACESSAR ESSA FUNÇÃO!")
+                menu(mensagem)
+        else:
+            bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
 
+def usuario_bot_cadastrar(mensagem):
+    id_chat = mensagem.chat.id
+    selecoes.append(mensagem.text)
+    bot.delete_message(id_chat,mensagem.message_id)
+    bot.send_message(id_chat, "INFORME A SENHA DO USUÁRIO DO BOT A SER CADASTRADO:")
+    bot.register_next_step_handler(mensagem, senha_bot_cadastrar)
+
+def senha_bot_cadastrar(mensagem):
+    id_chat = mensagem.chat.id
+    selecoes.append(mensagem.text)
+    bot.delete_message(id_chat,mensagem.message_id)
+    bot.send_message(id_chat, "INFORME O NIVEL DE PERMISSÃO DO USUÁRIO DO BOT A SER CADASTRADO(1-3):")
+    bot.register_next_step_handler(mensagem, nivel_bot_cadastrar)
+
+def nivel_bot_cadastrar(mensagem):
+    id_chat = mensagem.chat.id
+    selecoes.append(mensagem.text)
+    bot.delete_message(id_chat,mensagem.message_id)
+    retorno = abrir_conexao(selecoes)
+    if retorno:
+        bot.send_message(id_chat, "USUÁRIO CADASTRADO COM SUCESSO!")
+        menu(mensagem)
+    else:
+        bot.send_message(id_chat, "USUÁRIO JÁ EXISTE!")
+        menu(mensagem)
+    selecoes.clear()
+
+@bot.message_handler(commands=["bot_apagar"])
+def bot_apagar(mensagem):
+    id_chat = mensagem.chat.id
+    if not credenciais:
+        bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+    else:
+        dados = ['/verificar', credenciais[id_chat]['usuario']]
+        logado = abrir_conexao(dados)
+        if logado:
+            dados2 = ['/nivel', credenciais[id_chat]['usuario']]
+            verifica_nivel = abrir_conexao(dados2)
+            if 3 <= verifica_nivel[0]:
+                selecoes.append("/bot_apagar")
+                bot.send_message(id_chat, "INFORME O USUÁRIO DO BOT A SER APAGADO:")
+                bot.register_next_step_handler(mensagem, usuario_bot_apagar)
+            else:
+                bot.send_message(id_chat, "VOCÊ NÃO TEM PERMISSÃO PRA ACESSAR ESSA FUNÇÃO!")
+                menu(mensagem)
+        else:
+            bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+
+def usuario_bot_apagar(mensagem):
+    id_chat = mensagem.chat.id
+    selecoes.append(mensagem.text)
+    bot.delete_message(id_chat,mensagem.message_id)
+    retorno = abrir_conexao(selecoes)
+    if retorno:
+        bot.send_message(id_chat, "USUÁRIO APAGADO COM SUCESSO!")
+        menu(mensagem)
+    else:
+        bot.send_message(id_chat, "USUÁRIO NÃO EXISTE OU JÁ FOI EXCLUÍDO!")
+        menu(mensagem)
+    selecoes.clear()
+
+
+@bot.message_handler(commands=["bot_permissao"])
+def bot_permissao(mensagem):
+    id_chat = mensagem.chat.id
+    if not credenciais:
+        bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+    else:
+        dados = ['/verificar', credenciais[id_chat]['usuario']]
+        logado = abrir_conexao(dados)
+        if logado:
+            dados2 = ['/nivel', credenciais[id_chat]['usuario']]
+            verifica_nivel = abrir_conexao(dados2)
+            if 3 <= verifica_nivel[0]:
+                selecoes.append("/bot_permissao")
+                bot.send_message(id_chat, "INFORME O USUÁRIO DO BOT A SER MUDADA A PERMISSÃO:")
+                bot.register_next_step_handler(mensagem, usuario_bot_permissao)
+            else:
+                bot.send_message(id_chat, "VOCÊ NÃO TEM PERMISSÃO PRA ACESSAR ESSA FUNÇÃO!")
+                menu(mensagem)
+        else:
+            bot.send_message(id_chat, "VOCÊ NÃO ESTÁ LOGADO! CLIQUE AQUI PARA INICIAR: /iniciar")
+
+def usuario_bot_permissao(mensagem):
+    id_chat = mensagem.chat.id
+    selecoes.append(mensagem.text)
+    bot.delete_message(id_chat,mensagem.message_id)
+    bot.send_message(id_chat, "INFORME O NOVO NÍVEL DO USUÁRIO(1-3):")
+    bot.register_next_step_handler(mensagem, usuario_bot_nivel)
+
+def usuario_bot_nivel(mensagem):
+    id_chat = mensagem.chat.id
+    selecoes.append(mensagem.text)
+    bot.delete_message(id_chat,mensagem.message_id)
+    retorno = abrir_conexao(selecoes)
+    if retorno:
+        bot.send_message(id_chat, "PERMISSÃO ALTERADA COM SUCESSO!")
+        menu(mensagem)
+    else:
+        bot.send_message(id_chat, "USUÁRIO INEXISTENTE!")
+        menu(mensagem)
+    selecoes.clear()
 
 @bot.message_handler(commands=["logout"])
 def logout(mensagem):
@@ -254,7 +376,7 @@ VOCÊ DEVE SE AUTENTICAR PRIMEIRO!""")
     bot.register_next_step_handler(mensagem, usuario)
 
 # chama o objeto BOT para ficar em execução, é responsável por verificar continuamente se o bot está recebendo novas mensagens
-'''def iniciar_bot():
+def iniciar_bot():
     while True:
         try:
             bot.polling(none_stop=True, timeout=60, long_polling_timeout=30)
@@ -263,5 +385,5 @@ VOCÊ DEVE SE AUTENTICAR PRIMEIRO!""")
             time.sleep(15)  # Espera 15 segundos antes de tentar novamente
 
 # Inicia o bot
-iniciar_bot()'''
-bot.polling()
+iniciar_bot()
+#bot.polling()

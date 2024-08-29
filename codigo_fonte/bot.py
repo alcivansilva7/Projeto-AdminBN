@@ -52,9 +52,11 @@ def senha(mensagem):
         bot.delete_message(id_chat,mensagem.message_id)
         logado = abrir_conexao(dados_combinados)
         if logado:
+            logging.info(f'Usuário {credenciais[id_chat]["usuario"]} se autenticou com sucesso.', extra={'username': credenciais[id_chat]['usuario']})
             menu2(mensagem)
             
         else:
+            logging.warning(f'Tentativa de login com usuário {credenciais[id_chat]["usuario"]}', extra={'username': credenciais[id_chat]['usuario']})
             bot.send_message(id_chat, "USUÁRIO OU SENHA INCORRETOS, CLIQUE AQUI PARA INICIAR: /iniciar")
 
 

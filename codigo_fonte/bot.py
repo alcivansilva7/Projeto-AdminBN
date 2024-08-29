@@ -52,7 +52,7 @@ def senha(mensagem):
         bot.delete_message(id_chat,mensagem.message_id)
         logado = abrir_conexao(dados_combinados)
         if logado:
-            menu2(mensagem)
+            menu(mensagem)
             
         else:
             bot.send_message(id_chat, "USUÁRIO OU SENHA INCORRETOS, CLIQUE AQUI PARA INICIAR: /iniciar")
@@ -172,7 +172,7 @@ def usuario_apagar(mensagem):
     selecoes.clear()
 
 
-def menu(mensagem):
+def menu2(mensagem):
     id_chat = mensagem.chat.id
     bot.send_message(id_chat, """ESCOLHA A OPÇÃO DESEJADA:
 /listar LISTA TODOS OS IPs QUE ESTÃO NO LEASE DO DHCP
@@ -181,7 +181,7 @@ def menu(mensagem):
 /apagar_usuario    APAGA UM USUÁRIO NO HOTSPOT
 /logout            DESCONECTAR USUÁRIO
                              """)
-def menu2(mensagem):
+def menu(mensagem):
     id_chat = mensagem.chat.id
     dic_menu = {"/listar":{'desc':'LISTA TODOS OS IPs QUE ESTÃO NO LEASE DO DHCP', 'nivel':1},
                 "/listar_interface":{'desc':'LISTA TODOS OS IPs DAS INTERFACES DE REDE', 'nivel':1},
@@ -190,8 +190,14 @@ def menu2(mensagem):
                 "/logout":{'desc':'DESCONECTAR USUÁRIO', 'nivel':1}}
     envio = ["/nivel", credenciais[id_chat]['usuario']]
     retorno = abrir_conexao(envio)
-    filtro = dict(filter(lambda item: item[1]['nivel'] == retorno[0], dic_menu.items()))
+    filtro = dict(filter(lambda item: item[1]['nivel'] <= retorno[0], dic_menu.items()))
     print(filtro)
+    menu = '\n'.join(f"""{chave}  {descricao['desc']}""" for chave, descricao in filtro.items())
+    menu_final = "ESCOLHA A OPÇÃO DESEJADA:\n\n"+ menu
+    bot.send_message(id_chat,menu_final)
+
+
+
 @bot.message_handler(commands=["logout"])
 def logout(mensagem):
     id_chat = mensagem.chat.id

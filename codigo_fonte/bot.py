@@ -278,7 +278,7 @@ def nivel_bot_cadastrar(mensagem):
         bot.send_message(id_chat, "O NIVEL DE PERMISSÃO INFORMADO NÃO É VÁLIDO!")
         bot_cadastrar(mensagem)
 
-
+#Essa função é chamada quando o comando: /bot_apagar é chamado, é responsável por apagar usuários do BOT
 @bot.message_handler(commands=["bot_apagar"])
 def bot_apagar(mensagem):
     id_chat = mensagem.chat.id

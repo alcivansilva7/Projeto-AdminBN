@@ -224,6 +224,7 @@ def menu(mensagem):
     menu_final = "ESCOLHA A OPÇÃO DESEJADA:\n\n"+ menu
     bot.send_message(id_chat,menu_final)
 
+#Essa função é chamada quando o comando: /bot_cadastrar é chamado, é responsável por cadastrar usuários do BOT
 @bot.message_handler(commands=["bot_cadastrar"])
 def bot_cadastrar(mensagem):
     id_chat = mensagem.chat.id

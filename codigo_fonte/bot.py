@@ -313,7 +313,7 @@ def usuario_bot_apagar(mensagem):
         menu(mensagem)
     selecoes.clear()
 
-
+#Essa função é a responsável por alterar a permsisão de um usuário do BOT
 @bot.message_handler(commands=["bot_permissao"])
 def bot_permissao(mensagem):
     id_chat = mensagem.chat.id

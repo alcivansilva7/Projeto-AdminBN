@@ -359,7 +359,7 @@ def usuario_bot_nivel(mensagem):
         selecoes.clear()
         bot.send_message(id_chat, "O NIVEL DE PERMISSÃO INFORMADO NÃO É VÁLIDO!")
         bot_permissao(mensagem)
-
+# Essa função é a responsável fazer o logout do usuário
 @bot.message_handler(commands=["logout"])
 def logout(mensagem):
     id_chat = mensagem.chat.id

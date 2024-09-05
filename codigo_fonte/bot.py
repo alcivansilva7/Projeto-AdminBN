@@ -206,6 +206,7 @@ def usuario_apagar(mensagem):
 /apagar_usuario    APAGA UM USUÁRIO NO HOTSPOT
 /logout            DESCONECTAR USUÁRIO
                              """)'''
+#cria um menu dinâmico de acordo com a permissão do usuário
 def menu(mensagem):
     id_chat = mensagem.chat.id
     dic_menu = {"/listar":{'desc':'LISTA TODOS OS IPs QUE ESTÃO NO LEASE DO DHCP', 'nivel':1},

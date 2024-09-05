@@ -399,4 +399,3 @@ def iniciar_bot():
 
 # Inicia o bot
 iniciar_bot()
-#bot.polling()

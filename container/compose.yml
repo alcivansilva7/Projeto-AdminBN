@@ -23,8 +23,6 @@ services:
     container_name: bot
     env_file:
       - config.env
-    #ports:
-    #  - "5000:5000"
     networks:
       - adminbn
     volumes:

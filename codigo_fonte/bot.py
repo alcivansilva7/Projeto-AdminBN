@@ -21,7 +21,7 @@ bot = telebot.TeleBot(os.getenv('BOT_CHAVE'))
 
 def abrir_conexao(dados):
     socket_cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    socket_cliente.connect(("servidor", 5000))
+    socket_cliente.connect(("127.0.0.1", 5000))
     dados = json.dumps(dados)
     socket_cliente.sendall(dados.encode())
     dados = json.loads(socket_cliente.recv(4096).decode())
@@ -145,12 +145,14 @@ def cadastrar_usuario(mensagem):
 def usuario_hotspot(mensagem):
     id_chat = mensagem.chat.id
     selecoes.append(mensagem.text)
+    bot.delete_message(id_chat,mensagem.message_id)
     bot.send_message(id_chat, "INFORME A SENHA DO HOTSPOT:")
     bot.register_next_step_handler(mensagem, senha_hotspot)
 
 def senha_hotspot(mensagem):
     id_chat = mensagem.chat.id
     selecoes.append(mensagem.text)
+    bot.delete_message(id_chat,mensagem.message_id)
     retorno = abrir_conexao(selecoes)
     registrar_log(credenciais[id_chat]['usuario'], selecoes[0])
     if retorno == "comando realizado com sucesso":
@@ -264,16 +266,21 @@ def nivel_bot_cadastrar(mensagem):
     id_chat = mensagem.chat.id
     selecoes.append(mensagem.text)
     bot.delete_message(id_chat,mensagem.message_id)
-    if int(selecoes[3]) in range(1,4):
-        retorno = abrir_conexao(selecoes)
-        if retorno:
-            bot.send_message(id_chat, "USUÁRIO CADASTRADO COM SUCESSO!")
-            menu(mensagem)
+    try:
+        if int(selecoes[3]) in range(1,4):
+            retorno = abrir_conexao(selecoes)
+            if retorno:
+                bot.send_message(id_chat, "USUÁRIO CADASTRADO COM SUCESSO!")
+                menu(mensagem)
+            else:
+                bot.send_message(id_chat, "USUÁRIO JÁ EXISTE!")
+                menu(mensagem)
+            selecoes.clear()
         else:
-            bot.send_message(id_chat, "USUÁRIO JÁ EXISTE!")
-            menu(mensagem)
-        selecoes.clear()
-    else:
+            selecoes.clear()
+            bot.send_message(id_chat, "O NIVEL DE PERMISSÃO INFORMADO NÃO É VÁLIDO!")
+            bot_cadastrar(mensagem)
+    except:
         selecoes.clear()
         bot.send_message(id_chat, "O NIVEL DE PERMISSÃO INFORMADO NÃO É VÁLIDO!")
         bot_cadastrar(mensagem)
